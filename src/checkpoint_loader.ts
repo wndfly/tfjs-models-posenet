@@ -46,10 +46,10 @@ export class CheckpointLoader {
 
   private loadManifest(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      fs.readFile(this.urlPath + MANIFEST_FILE, (err, data) => {
+      fs.readFile(this.urlPath + MANIFEST_FILE, 'utf8', (err, data) => {
         if (err) {
           throw new Error(
-            `${MANIFEST_FILE} not found at ${this.urlPath}. ${error}`);
+            `${MANIFEST_FILE} not found at ${this.urlPath}. ${err}`);
         } else {
           this.checkpointManifest = JSON.parse(data);
           resolve();
@@ -110,7 +110,7 @@ export class CheckpointLoader {
         
         fs.readFile(this.urlPath + fname, (err, data) => {
           if (err) {
-            throw new Error(`Could not fetch variable ${varName}: ${error}`);
+            throw new Error(`Could not fetch variable ${varName}: ${err}`);
           } else {
             const values = new Float32Array(data);
             const tensor =
