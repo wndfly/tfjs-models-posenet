@@ -108,11 +108,11 @@ export class CheckpointLoader {
       (resolve: (tensor: Tensor) => void, reject: () => void) => {
         const fname = this.checkpointManifest[varName].filename;
         
-        fs.readFile(this.urlPath + fname, (err, data) => {
+        fs.readFile(this.urlPath + fname, (err, buf) => {
           if (err) {
             throw new Error(`Could not fetch variable ${varName}: ${err}`);
           } else {
-            const values = new Float32Array(data);
+            const values = new Float32Array(buf.buffer, buf.byteOffset, buf.byteLength / Float32Array.BYTES_PER_ELEMENT);
             const tensor =
               Tensor.make(this.checkpointManifest[varName].shape, {values});
             resolve(tensor);
